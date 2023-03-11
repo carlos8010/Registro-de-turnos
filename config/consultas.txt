@@ -1,0 +1,44 @@
+1) consultar horas trabajadas por usuario
+
+SELECT tblusu.nombre_usuario, tblusu.tipo_usuario,tblusu.area_usuario, tblusu.cedula, SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(fecha_salida, fecha_ingreso)))) AS horas_trabajadas
+FROM (
+    SELECT r1.id_registro, r1.id_usuario_Fk, r1.fecha_hora_registro AS fecha_ingreso, MIN(r2.fecha_hora_registro) AS fecha_salida
+    FROM tbl_registros r1
+    LEFT JOIN tbl_registros r2 ON r1.id_usuario_Fk = r2.id_usuario_Fk 
+		AND r1.fecha_hora_registro < r2.fecha_hora_registro 
+        AND r1.tipo_registro = 0 AND r2.tipo_registro = 1
+    WHERE r1.fecha_hora_registro BETWEEN '2023-03-10 08:00:00' AND '2023-03-10 23:59:59'
+    GROUP BY r1.id_registro
+) t
+INNER JOIN tbl_usuarios tblusu ON id_usuario_Fk=tblusu.id_usuario
+GROUP BY id_usuario_Fk;
+
+
+2) consultar horas trabajadas por area
+
+SELECT u.area_usuario, SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(r.fecha_salida, r.fecha_ingreso)))) AS horas_trabajadas
+FROM (
+    SELECT r1.id_registro, r1.id_usuario_Fk, r1.fecha_hora_registro AS fecha_ingreso, MIN(r2.fecha_hora_registro) AS fecha_salida
+    FROM tbl_registros r1
+    LEFT JOIN tbl_registros r2 ON r1.id_usuario_Fk = r2.id_usuario_Fk 
+        AND r1.fecha_hora_registro < r2.fecha_hora_registro 
+        AND r1.tipo_registro = 0 AND r2.tipo_registro = 1
+    WHERE r1.fecha_hora_registro BETWEEN '2023-03-11 00:00:00' AND '2023-03-11 23:59:59'
+    GROUP BY r1.id_registro
+) r
+INNER JOIN tbl_usuarios u ON r.id_usuario_Fk = u.id_usuario
+GROUP BY u.area_usuario;
+
+3) personas dentro de la empresa
+
+SELECT COUNT(*) AS empleados_en_oficina
+FROM (
+    SELECT 
+		r1.id_usuario_Fk, r1.fecha_hora_registro AS fecha_ingreso, 
+        MAX(r1.fecha_hora_registro) AS fecha_ultimo_registro,
+        MAX(r1.tipo_registro) AS ultimo_tipo_registro
+    FROM tbl_registros r1
+    WHERE DATE(r1.fecha_hora_registro) = CURDATE()
+    GROUP BY r1.id_usuario_Fk
+) t
+WHERE t.ultimo_tipo_registro = 0 AND DATE(t.fecha_ultimo_registro) = CURDATE()

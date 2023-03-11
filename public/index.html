@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./Css/style.css">
+
+    <!-- jquery       -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- link de bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+
+    <!-- Iconos de bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+
+    <!-- table bootstrap -->
+    <link href="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css"
+    />
+
+    <!-- parsley -->
+    <link rel="stylesheet" href="./Parsley.js-2.8.1/src/parsley.css" />
+
+    <title>Ingresos - Salidas</title>
+  </head>
+
+  <body>
+
+    <!-- Code -->
+
+    <nav class="navbar navbar-light bg-light justify-content-center">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="Registrar-tab" data-bs-toggle="tab" data-bs-target="#Registrar" type="button" role="tab" aria-controls="Registrar" aria-selected="true">Registrar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="Usuarios-tab" data-bs-toggle="tab" data-bs-target="#Usuarios" type="button" role="tab" aria-controls="Usuarios" aria-selected="false">Usuarios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="Reportes-tab" data-bs-toggle="tab" data-bs-target="#Reportes" type="button" role="tab" aria-controls="Reportes" aria-selected="false">Reportes</button>
+        </li>
+      </ul>
+    </nav>
+
+    
+    
+    <section class="content">
+
+      <div class="tab-content" id="myTabContent">
+
+
+        <!-- Registro -->
+        <div class="tab-pane fade show active" id="Registrar" role="tabpanel" aria-labelledby="Registrar-tab">
+          
+          <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4 d-flex justify-content-center mt-5">
+                <div class="container-fluid border border-3 border-dark rounded mt-5 bg-light">
+                  <center>
+                    <br>
+                    <h2>Registro</h2>
+                    <hr>
+                    <form class="mx-auto" id="registroIngesoSalida">
+                      
+                      <div class="row">
+                          <div class="col-12">
+                              <label for="Identificacion" class="form-label">Identificación</label>
+                              <input type="number" class="form-control" id="regIdentificacion" required data-parsley-error-message="Identificación obligatoria">
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                          <div class="col-6">
+                              <label for="fecha_hora" class="form-label">Fecha y hora</label>
+                              <input type="text" class="form-control text-center" id="regfecha_hora" disabled>
+                          </div>
+                          <div class="col-6">
+                            <label for="control" class="form-label">Control</label>
+                            <br>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="ingreso_salida" id="regingreso" value="0" checked >
+                                  <label class="form-check-label" for="ingreso">Ingreso</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="ingreso_salida" id="regsalida" value="1" >
+                                  <label class="form-check-label" for="salida">Salida</label>
+                              </div>
+                              
+
+                          </div>
+                      </div>
+                     
+                      <br>
+                      
+                      <input type="button" value="Registrar" class="btn btn-primary" id="Registrar_btn">
+                      <br>
+                      <br>
+                  </form>
+                  </center>
+                    
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        
+
+          
+
+
+
+
+
+        </div>
+
+        <!-- Usuarios -->
+        <div class="tab-pane fade" id="Usuarios" role="tabpanel" aria-labelledby="Usuarios-tab">
+
+
+          <div class="container">
+
+            <div class="row mt-5">
+              <div class="col-3">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#ModalCreateUser">
+                  Crear Usuario
+                </button>
+              </div>
+              
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <table 
+                id="tableUsers" 
+                data-filter-control="true"
+                data-pagination="true"
+                data-show-search-clear-button="true">
+                <thead>
+                  <tr>
+                    <th data-field="usuNombre" data-sortable="true" data-filter-control="input">Nombre</th>
+                    <th data-field="usuTipo" data-sortable="true" data-filter-control="select">Tipo usuario</th>
+                    <th data-field="usuArea" data-sortable="true" data-filter-control="select">Area</th>
+                    <th data-field="usuCedula" data-sortable="true" data-filter-control="input">Cedula</th>
+                    <th data-field="operate" class="text-center" data-formatter="operateFormatter" data-events="operateEvents">Acciones</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            
+
+          </div>
+
+
+          <!-- Modal crear usuario -->
+          <div class="modal fade" id="ModalCreateUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Crear usuario</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <form class="mx-auto" id="formulario_usuario">
+
+                    <div class="row">
+                      <div class="col-12">
+                        <label for="usuNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="usuNombre" required data-parsley-error-message="nombre obligatori">
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-12">
+                        <label for="usuIdentificacion" class="form-label">Identificación</label>
+                        <input type="number" class="form-control" id="usuIdentificacion" required data-parsley-error-message="Identificación obligatoria">
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="usuTipo" class="form-label">Tipo de usuario</label>
+                        <select class="form-select" id="usuTipo">
+                          <option value="Empleado" selected>Empleado</option>
+                          <option value="Invitado">Invitado</option>
+                          <option value="Proveedor">Proveedor</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <label for="usuArea" class="form-label">Area</label>
+                        <select class="form-select" id="usuArea">
+                          <option value="Sistemas" selected>Sistemas</option>
+                          <option value="Mercadeo">Mercadeo</option>
+                          <option value="Produccion">Produccion</option>
+                          <option value="Centro de costos">Centro de costos</option>
+                        </select>
+                      </div>
+                    </div>
+                    <br>
+                    
+                      
+                    <input type="button" value="Crear usuario" class=" btn btn-outline-success position-relative mt-4 start-50 translate-middle " id="crear_usuario_btn">
+                    
+                    
+
+                  </form>
+                  
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal editar usuario -->
+          <div class="modal fade" id="ModalEditeUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Editar usuario</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <form class="mx-auto" id="formulario_edit_usuario">
+
+                    <div class="row">
+                      <div class="col-12">
+                        <label for="usuEditNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="usuEditNombre" required data-parsley-error-message="nombre obligatori">
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-12">
+                        <label for="usuEditIdentificacion" class="form-label">Identificación</label>
+                        <input type="number" class="form-control" id="usuEditIdentificacion" disabled>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="usuEditTipo" class="form-label">Tipo de usuario</label>
+                        <select class="form-select" id="usuEditTipo">
+                          <option value="Empleado">Empleado</option>
+                          <option value="Invitado">Invitado</option>
+                          <option value="Proveedor">Proveedor</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <label for="usuEditArea" class="form-label">Area</label>
+                        <select class="form-select" id="usuEditArea">
+                          <option value="Sistemas">Sistemas</option>
+                          <option value="Mercadeo">Mercadeo</option>
+                          <option value="Produccion">Produccion</option>
+                          <option value="Centro de costos">Centro de costos</option>
+                        </select>
+                      </div>
+                    </div>
+                    <br>
+                    
+                      
+                    <input type="button" value="Editar usuario" class=" btn btn-outline-success position-relative mt-4 start-50 translate-middle " id="editar_usuario_btn">
+                    
+                    
+
+                  </form>
+                  
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+
+        <!-- Reportes -->
+        <div class="tab-pane fade" id="Reportes" role="tabpanel" aria-labelledby="Reportes-tab">
+
+          <div class="container mt-3">
+
+            <div class="row">
+
+              <div class="col-8">
+
+                <div class="row">
+
+                  
+                  <h4>Fechas de reporte</h4>
+                  
+    
+                  <div class="col-4 mt-3">
+                    <label for="fecha_horaInicio" class="form-label">Fecha y hora inicio</label>
+                    <input type="datetime-local" class="form-control text-center" id="reFechaInicio">
+                  </div>
+                  <div class="col-4 mt-3">
+                    <label for="fecha_horaFin" class="form-label">Fecha y hora fin</label>
+                    <input type="datetime-local" class="form-control text-center" id="reFechaFin">
+                  </div>
+                  <div class="col-4 mt-5">
+                    <input type="button" value="Generar reporte" class="btn btn-primary" id="generarReporte">
+                  </div>
+                  
+                  
+    
+                </div>
+
+              </div>
+              <div class="col-4 mt-5">
+                <div class="container border border-2 border-dark rounded bg-light">
+                  <h5 id="usuariosDentro" class="mt-2"></h5>
+                </div>
+                
+                
+              </div>
+
+              
+            </div>
+
+
+
+            <hr>
+
+            <div class="row mt-3">
+
+              <div class="col-8">
+
+                <h4>Reporte por usuarios</h4>
+                <hr>
+
+                <table 
+                id="tableUsersHoras" 
+                data-filter-control="true"
+                data-pagination="true"
+                data-show-search-clear-button="true">
+                <thead>
+                  <tr>
+                    <th data-field="usuReNombre" data-sortable="true" data-filter-control="input">Nombre</th>
+                    <th data-field="usuReTipo" data-sortable="true" data-filter-control="select">Tipo usuario</th>
+                    <th data-field="usuReArea" data-sortable="true" data-filter-control="select">Area</th>
+                    <th data-field="usuReCedula" data-sortable="true" data-filter-control="input">Cedula</th>
+                    <th data-field="usuReHoras" data-sortable="true" data-filter-control="typeahead">Horas trabajadas</th>
+                  </tr>
+                </thead>
+              </table>
+
+              </div>
+              <div class="col-4">
+
+                <h4>Reporte por areas</h4>
+                <hr>
+                
+
+                <table 
+                id="tableAreaHoras" 
+                data-filter-control="true"
+                data-pagination="true"
+                data-show-search-clear-button="true">
+                <thead>
+                  <tr>
+                    <th data-field="ReArea" data-sortable="true" data-filter-control="select">Area</th>
+                    <th data-field="ReHoras" data-sortable="true">Horas trabajadas</th>
+                  </tr>
+                </thead>
+              </table>
+
+              </div>
+
+
+            </div>
+          </div>
+          
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+    
+
+
+
+
+
+    <!-- End code -->
+
+
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.all.min.js"></script>
+
+
+    <!-- Script de bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- parsley -->
+    <script src="./Parsley.js-2.8.1/dist/parsley.js"></script>
+
+    <!-- Js         -->
+    <script src="./JS/main.js"></script>
+    <script src="./JS/funciones.js"></script>
+    
+    
+    
+    
+  </body>
+</html>
