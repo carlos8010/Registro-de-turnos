@@ -22,3 +22,6 @@
 ```
 npm i
 ```
+```
+npm run serv
+```
